@@ -8,7 +8,7 @@ declare -a CONF_ARRAY=("fastest_mirror=True" "max_parallel_downloads=10")
 declare -i DNF_CHANGES=0
 
 declare ZSH_ENV_PATH="/etc/zshenv"
-declare ZDOTDIR_CONF="exp-ort ZDOTDIR=$HOME/.config/zsh"
+declare ZDOTDIR_CONF="export ZDOTDIR=$HOME/.config/zsh"
 
 # Loop every configuration and checks if it already exists
 for CONF in ${CONF_ARRAY[@]}; do
@@ -44,7 +44,7 @@ sudo -u $USERNAME chsh -s $(which zsh)
 echo ">> Configuring global zshenv."
 if ! grep -Fxq "$ZDOTDIR_CONF" $ZSH_ENV_PATH ; then
 	echo ">> Adding ZDOTDIR env variable."
-	echo ">> $ZDOTDIR_CONF" | sudo tee -a $ZSH_ENV_PATH > /dev/null
+	echo "$ZDOTDIR_CONF" | sudo tee -a $ZSH_ENV_PATH > /dev/null
 else
 	echo ">> ZDOTDIR already configured."
 fi
