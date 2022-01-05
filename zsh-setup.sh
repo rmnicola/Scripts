@@ -6,19 +6,13 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 # Require sudo
 source $SCRIPT_DIR/require-sudo.sh
 
-echo ">> Downloading and configuring zsh."
+echo ">> Configuring zsh."
 
 # Set global zshenv path
 declare ZSH_ENV_PATH="/etc/zshenv"
 
 # Set location for zsh's conf folder
 declare ZDOTDIR_CONF="export ZDOTDIR=/home/$SUDO_USER/.config/zsh"
-
-echo ">>>> Installing zsh."
-dnf -y install zsh
-
-echo ">>>> Installing util-linux-user"
-dnf -y install util-linux-user
 
 echo ">>>> Changing default shell to zsh."
 deescalate_user chsh -s $(which zsh)

@@ -24,6 +24,8 @@ deescalate_user rm -v /home/$SUDO_USER/.bash*
 echo ">> Cleaning up git files."
 echo ">>>> Creating config folder for git."
 deescalate_user mkdir -p /home/$SUDO_USER/.config/git
+echo ">>>> Creating config file for git."
+deescalate_user touch /home/$SUDO_USER/.config/git/config
 echo ">>>> Sending existing git config to the proper location"
 deescalate_user mv /home/$SUDO_USER/.gitconfig /home/$SUDO_USER/.config/git/config 
 

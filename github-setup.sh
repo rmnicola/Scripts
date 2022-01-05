@@ -13,7 +13,7 @@ echo ">>>> Restarting ssh agent."
 eval "$(ssh-agent -s)"
 ssh-add 
 
-cat $HOME/.ssh/id_$1.pub | xclip -sel clip 2> /dev/null
+cat $HOME/.ssh/id_$1.pub | xclip -sel clip
 
 if [[ $? -ne 0 ]] ; then
 	echo ">>>> Xclip has returned an error.

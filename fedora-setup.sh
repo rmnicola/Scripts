@@ -14,8 +14,12 @@ if [ "${DNF_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/dnf-setup.sh; fi
 read -p "-- Update system (this may take a few minutes)? [y/N] -> " UPDATE_OPTION
 if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf -y update; fi
 
+# >> download programs from applist.txt
+read -p "-- Install software from applist.txt? [y/N] -> " INSTALL_OPTION
+if [ "${INSTALL_OPTION,,}" = "y" ] ; then dnf -y install $(cat applist.txt); fi
+
 # >> download and configure zsh
-read -p "-- Download and configure zsh? [y/N] -> " ZSH_OPTION
+read -p "-- Configure zsh? [y/N] -> " ZSH_OPTION
 if [ "${ZSH_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/zsh-setup.sh; fi
 
 # >> fixing xdg base dir mess
