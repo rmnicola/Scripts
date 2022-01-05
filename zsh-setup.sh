@@ -17,8 +17,11 @@ declare ZDOTDIR_CONF="export ZDOTDIR=/home/$SUDO_USER/.config/zsh"
 echo ">>>> Installing zsh."
 dnf -y install zsh
 
+echo ">>>> Installing util-linux-user"
+dnf -y install util-linux-user
+
 echo ">>>> Changing default shell to zsh."
-deescalate chsh -s $(which zsh) 2> /dev/null
+deescalate_user chsh -s $(which zsh)
 
 echo ">>>> Configuring global zshenv."
 if ! grep -Fxq "$ZDOTDIR_CONF" $ZSH_ENV_PATH ; then
@@ -29,10 +32,10 @@ else
 fi
 
 echo ">>>> Grabbing configuration files from remote repo"
-deescalate rm -rf $HOME/Dotfiles
-deescalate git clone --recurse-submodules \
-	https://github.com/rmnicola/Dotfiles $HOME/Dotfiles
+deescalate_user rm -rf /home/$SUDO_USER/Dotfiles
+deescalate_user git clone --recurse-submodules \
+	https://github.com/rmnicola/Dotfiles /home/$SUDO_USER/Dotfiles
 
 echo ">>>> Creating symlink to zsh config folder."
-deescalate ln -sfvT $HOME/Dotfiles/zsh $ZDOTDIR
+deescalate_user ln -sfvT /home/$SUDO_USER/Dotfiles/zsh /home/$SUDO_USER/.config/zsh
 

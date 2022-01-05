@@ -6,3 +6,7 @@ function deescalate() {
 	su $SUDO_USER -c '$@'
 }
 
+function deescalate_user() {
+	sudo -u $SUDO_USER $@
+}
+
