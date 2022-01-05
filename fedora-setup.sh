@@ -18,7 +18,7 @@ if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf -y update; fi
 read -p "-- Install software from applist.txt? [y/N] -> " INSTALL_OPTION
 if [ "${INSTALL_OPTION,,}" = "y" ] ; then dnf -y install $(cat applist.txt); fi
 
-# >> download and configure zsh
+# >> Configure zsh
 read -p "-- Configure zsh? [y/N] -> " ZSH_OPTION
 if [ "${ZSH_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/zsh-setup.sh; fi
 
@@ -31,8 +31,16 @@ read -p "-- Configure git global options? [y/N] -> " GIT_OPTION
 if [ "${GIT_OPTION,,}" = "y" ] ; then sudo -u $SUDO_USER $SCRIPT_DIR/git-setup.sh; fi
 
 # >> configuring github access
-read -p "-- Configure github access [y/N] -> " GITHUB_OPTION
+read -p "-- Configure github access? [y/N] -> " GITHUB_OPTION
 if [ "${GITHUB_OPTION,,}" = "y" ] ; then 
 	dnf install -y xclip
 	sudo -u $SUDO_USER $SCRIPT_DIR/github-setup.sh ed25519
+fi
+
+# >> configure rclone
+read -p "-- Configure rclone? [y/N] -> " RCLONE_OPTION
+if [ "${RCLONE_OPTION,,}" = "y" ] ; then 
+	$SCRIPT_DIR/rclone-setup.sh
+	echo ">> Checking rclone config."
+	deescalate_user rclone config
 fi
