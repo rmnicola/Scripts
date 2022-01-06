@@ -41,6 +41,24 @@ fi
 read -p "-- Configure rclone? [y/N] -> " RCLONE_OPTION
 if [ "${RCLONE_OPTION,,}" = "y" ] ; then 
 	$SCRIPT_DIR/rclone-setup.sh
-	echo ">> Checking rclone config."
+	echo ">> Checking rclone config. Press any key to continue..."
+	read
 	deescalate_user rclone config
 fi
+
+# >> Grab system backup
+read -p "-- Download and restore system backup? [y/N] -> " SYS_BKP_OPTION
+if [ "${SYS_BKP_OPTION,,}" = "y" ] ; then 
+	deescalate_user rclone copy --drive-chunk-size 512M --max-backlog 999999 \
+	--fast-list -v --checkers 5 --transfers 30 --stats 30s \
+	gdrive-crypto:backup/.backup /home/$SUDO_USER/Documents/.backup
+fi
+
+# >> Grab documents backup
+read -p "-- Download and restore documents folder? [y/N] -> " DOC_BKP_OPTION
+if [ "${DOC_BKP_OPTION,,}" = "y" ] ; then 
+	deescalate_user rclone copy --drive-chunk-size 512M --max-backlog 999999 \
+	--fast-list -v --checkers 5 --transfers 30 --stats 30s \
+	gdrive-crypto:backup /home/$SUDO_USER/Documents
+fi
+
