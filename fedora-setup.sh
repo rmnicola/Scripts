@@ -28,13 +28,12 @@ if [ "${XDG_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/xdg-dirs-setup.sh; fi
 
 # >> configuring git options
 read -p "-- Configure git global options? [y/N] -> " GIT_OPTION
-if [ "${GIT_OPTION,,}" = "y" ] ; then sudo -u $SUDO_USER $SCRIPT_DIR/git-setup.sh; fi
+if [ "${GIT_OPTION,,}" = "y" ] ; then deescalate_user $SCRIPT_DIR/git-setup.sh; fi
 
 # >> configuring github access
 read -p "-- Configure github access? [y/N] -> " GITHUB_OPTION
 if [ "${GITHUB_OPTION,,}" = "y" ] ; then 
-	dnf install -y xclip
-	sudo -u $SUDO_USER $SCRIPT_DIR/github-setup.sh ed25519
+	deescalate_user $SCRIPT_DIR/github-setup.sh ed25519
 fi
 
 # >> configure rclone

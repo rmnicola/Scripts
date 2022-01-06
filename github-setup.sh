@@ -14,13 +14,9 @@ eval "$(ssh-agent -s)"
 ssh-add 
 
 cat $HOME/.ssh/id_$1.pub | xclip -sel clip
-
-if [[ $? -ne 0 ]] ; then
-	echo ">>>> Xclip has returned an error.
->>>> To ensure you have xclip installed, run 'sudo dnf install xclip'"
-	exit
+if [[ $? -eq 0 ]] ; then
+	echo ">>>> Your public key has been copied to your clipboard."
 fi
 
-echo ">>>> Your public key has been copied to your clipboard."
 echo ">>>> All you need to do now is go to github and paste it."
 echo ">>>> Link: https://github.com/settings/ssh/new" 
