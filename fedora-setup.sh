@@ -45,8 +45,17 @@ if [ "${RCLONE_OPTION,,}" = "y" ] ; then
 	deescalate_user rclone config
 fi
 
+# >> Fixing choppy video playback in firefox 
+fedora_version='https://mirrors.rpmfusion.org/free/fedora/'\
+'rpmfusion-free-release-'"$(rpm -E %fedora).noarch.rpm"
+read -p "-- Fix issue with firefox video playback? [y/N] -> " FIREFOX_VIDEO_OPTION
+if [ "${FIREFOX_VIDEO_OPTION,,}" = "y" ] ; then 
+	dnf install -y $fedora_version
+	dnf install -y ffmpeg-libs
+fi
+
 # >> Grab system backup
-read -p "-- Download and restore system backup? [y/N] -> " SYS_BKP_OPTION
+read -p "-- Download and restore gnome backup? [y/N] -> " SYS_BKP_OPTION
 if [ "${SYS_BKP_OPTION,,}" = "y" ] ; then 
 	deescalate_user rclone copy --drive-chunk-size 512M --max-backlog 999999 \
 	--fast-list -v --checkers 5 --transfers 30 --stats 30s \
@@ -60,4 +69,3 @@ if [ "${DOC_BKP_OPTION,,}" = "y" ] ; then
 	--fast-list -v --checkers 5 --transfers 30 --stats 30s \
 	gdrive-crypto:backup /home/$SUDO_USER/Documents
 fi
-

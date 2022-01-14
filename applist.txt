@@ -1,3 +1,4 @@
 zsh
 util-linux-user
 neovim
+xclip
