@@ -16,7 +16,7 @@ if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf -y update; fi
 
 # >> download programs from applist.txt
 read -p "-- Install software from applist.txt? [y/N] -> " INSTALL_OPTION
-if [ "${INSTALL_OPTION,,}" = "y" ] ; then dnf -y install $(cat applist.txt); fi
+if [ "${INSTALL_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/software-install.sh; fi
 
 # >> Configure zsh
 read -p "-- Configure zsh? [y/N] -> " ZSH_OPTION
@@ -45,13 +45,11 @@ if [ "${RCLONE_OPTION,,}" = "y" ] ; then
 	deescalate_user rclone config
 fi
 
-# >> Fixing choppy video playback in firefox 
-fedora_version='https://mirrors.rpmfusion.org/free/fedora/'\
-'rpmfusion-free-release-'"$(rpm -E %fedora).noarch.rpm"
-read -p "-- Fix issue with firefox video playback? [y/N] -> " FIREFOX_VIDEO_OPTION
-if [ "${FIREFOX_VIDEO_OPTION,,}" = "y" ] ; then 
-	dnf install -y $fedora_version
-	dnf install -y ffmpeg-libs
+# >> Link firefox launchers
+read -p "-- Configure firefox custom launcher? [y/N] -> " FIREFOX_OPTION
+if [ "${FIREFOX_OPTION,,}" = "y" ] ; then 
+	ln -sfvT /home/$SUDO_USER/Dotfiles/firefox/firefox-mod.desktop \
+		/usr/share/applications/firefox-mod.desktop
 fi
 
 # >> Grab system backup

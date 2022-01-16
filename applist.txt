@@ -2,3 +2,6 @@ zsh
 util-linux-user
 neovim
 xclip
+ffmpeg-libs
+vlc
+dconf-editor
