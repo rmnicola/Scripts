@@ -10,4 +10,3 @@ read -p "-- Enter your email address (same as github): " EMAIL
 git config --global user.email "$EMAIL"
 echo ">>>> Setting neovim as the main git editor."
 git config --global core.editor nvim
-

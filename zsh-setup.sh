@@ -14,22 +14,13 @@ declare ZSH_ENV_PATH="/etc/zshenv"
 # Set location for zsh's conf folder
 declare ZDOTDIR_CONF="export ZDOTDIR=/home/$SUDO_USER/.config/zsh"
 
-echo ">>>> Changing default shell to zsh."
+echo ">> Changing default shell to zsh."
 deescalate_user chsh -s $(which zsh)
 
-echo ">>>> Configuring global zshenv."
+echo ">> Configuring global zshenv."
 if ! grep -Fxq "$ZDOTDIR_CONF" $ZSH_ENV_PATH ; then
-	echo ">>>>>> Adding ZDOTDIR env variable."
+	echo ">>>> Adding ZDOTDIR env variable."
 	echo "$ZDOTDIR_CONF" | tee -a $ZSH_ENV_PATH > /dev/null
 else
-	echo ">>>>>> ZDOTDIR already configured."
+	echo ">>>> ZDOTDIR already configured."
 fi
-
-echo ">>>> Grabbing configuration files from remote repo"
-deescalate_user rm -rf /home/$SUDO_USER/Dotfiles
-deescalate_user git clone --recurse-submodules \
-	https://github.com/rmnicola/Dotfiles /home/$SUDO_USER/Dotfiles
-
-echo ">>>> Creating symlink to zsh config folder."
-deescalate_user ln -sfvT /home/$SUDO_USER/Dotfiles/zsh /home/$SUDO_USER/.config/zsh
-

@@ -11,8 +11,8 @@ read -p "-- Do you wish to configure dnf? [y/N] -> " DNF_OPTION
 if [ "${DNF_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/dnf-setup.sh; fi
 
 # >> update system packages
-read -p "-- Update system (this may take a few minutes)? [y/N] -> " UPDATE_OPTION
-if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf -y update; fi
+read -p "-- Update system (will take a few minutes)? [y/N] -> " UPDATE_OPTION
+if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf update; fi
 
 # >> download programs from applist.txt
 read -p "-- Install software from applist.txt? [y/N] -> " INSTALL_OPTION
@@ -22,13 +22,18 @@ if [ "${INSTALL_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/software-install.sh; fi
 read -p "-- Configure zsh? [y/N] -> " ZSH_OPTION
 if [ "${ZSH_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/zsh-setup.sh; fi
 
+read -p "-- Set up dotfiles? [y/N] -> " DOT_OPTION
+if [ "${DOT_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/dotfiles-setup.sh; fi
+
 # >> fixing xdg base dir mess
 read -p "-- Fix XDG Base directory mess? [y/N] -> " XDG_OPTION
 if [ "${XDG_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/xdg-dirs-setup.sh; fi
 
 # >> configuring git options
 read -p "-- Configure git global options? [y/N] -> " GIT_OPTION
-if [ "${GIT_OPTION,,}" = "y" ] ; then deescalate_user $SCRIPT_DIR/git-setup.sh; fi
+if [ "${GIT_OPTION,,}" = "y" ] ; then 
+  deescalate_user $SCRIPT_DIR/git-setup.sh
+fi
 
 # >> configuring github access
 read -p "-- Configure github access? [y/N] -> " GITHUB_OPTION
@@ -40,16 +45,8 @@ fi
 read -p "-- Configure rclone? [y/N] -> " RCLONE_OPTION
 if [ "${RCLONE_OPTION,,}" = "y" ] ; then 
 	$SCRIPT_DIR/rclone-setup.sh
-	echo ">> Checking rclone config. Press any key to continue..."
-	read
+  read -p ">> Checking rclone config. Press any key to continue..."
 	deescalate_user rclone config
-fi
-
-# >> Link firefox launchers
-read -p "-- Configure firefox custom launcher? [y/N] -> " FIREFOX_OPTION
-if [ "${FIREFOX_OPTION,,}" = "y" ] ; then 
-	ln -sfvT /home/$SUDO_USER/Dotfiles/firefox/firefox-mod.desktop \
-		/usr/share/applications/firefox-mod.desktop
 fi
 
 # >> Grab system backup

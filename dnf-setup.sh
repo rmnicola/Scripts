@@ -13,11 +13,10 @@ declare DNF_CONF_PATH="/etc/dnf/dnf.conf"
 
 # Set array of configurations
 declare -a CONF_ARRAY=(	"fastest_mirror=True"		\
-		       	"max_parallel_downloads=10" )
+  "max_parallel_downloads=10" )
 
 # Keeps tab of how many changes were actually made
 declare -i DNF_CHANGES=0
-
 
 # Loop every configuration and checks if it already exists
 for CONF in ${CONF_ARRAY[@]}; do
@@ -25,12 +24,11 @@ for CONF in ${CONF_ARRAY[@]}; do
 	if ! grep -Fxq $CONF $DNF_CONF_PATH ; then 
 		# If it does not exist, add it
 		sed -i "/^[main]/a $CONF" $DNF_CONF_PATH 
-		echo ">>>>>> Added option $CONF!"
-
+    check_operation Add option $CONF
 		# Increment changes made
 		let "DNF_CHANGES++"
 	else
-		echo ">>>>>> Option $CONF has already been added"
+		echo ">>>>>> Option $CONF has already been added."
 	fi
 done
 
@@ -41,4 +39,3 @@ if [ $DNF_CHANGES -gt 0 ] ; then
 else
 	echo ">>>> No changes were made, moving on."
 fi
-

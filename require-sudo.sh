@@ -10,3 +10,10 @@ function deescalate_user() {
 	sudo -u $SUDO_USER $@
 }
 
+# This doesn't really belong here, change later.
+function check_operation() {
+  if [ $? -eq 0 ]; then echo ">> $@ successfull."
+  else echo ">> Failed: $@."
+  fi
+}
+

@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 declare GITHUB_EMAIL=$(git config user.email)
-read -p "-- Your git EMAIL is: $GITHUB_EMAIL. Is it the same for github? y/N -> " \
+read -p "-- Your git EMAIL is: $GITHUB_EMAIL. Keep it for github? y/N -> " \
 	CHECK
 if [ ! "${CHECK,,}" = "y" ] ; then 
 	read -p "Enter your github EMAIL: " GITHUB_EMAIL
