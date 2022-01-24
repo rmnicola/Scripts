@@ -22,6 +22,11 @@ if [ "${INSTALL_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/software-install.sh; fi
 read -p "-- Configure zsh? [y/N] -> " ZSH_OPTION
 if [ "${ZSH_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/zsh-setup.sh; fi
 
+read -p "-- Install Hack font? [y/N] -> " HACK_OPTION
+if [ "${HACK_OPTION,,}" = "y" ] ; then 
+  deescalate_user $SCRIPT_DIR/font-setup.sh
+fi
+
 read -p "-- Set up dotfiles? [y/N] -> " DOT_OPTION
 if [ "${DOT_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/dotfiles-setup.sh; fi
 
