@@ -7,7 +7,7 @@ mkdir -vp $font_dir
 
 echo ">> Downloading Fonts."
 curl -Lo Hack.zip --output-dir $font_dir \
-  "https://github.com/source-foundry/Hack/releases/download/v3.003/Hack-v3.003-ttf.zip"
+  "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip"
 
 echo ">> Unziping Fonts."
 unzip $font_dir/Hack.zip -d $font_dir/Hack

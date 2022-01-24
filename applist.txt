@@ -5,3 +5,7 @@ xclip
 ffmpeg-libs
 vlc
 dconf-editor
+gcc
+g++
+clang
+cmake
