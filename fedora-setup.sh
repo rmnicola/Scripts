@@ -10,6 +10,10 @@ source $SCRIPT_DIR/require-sudo.sh
 read -p "-- Do you wish to configure dnf? [y/N] -> " DNF_OPTION
 if [ "${DNF_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/dnf-setup.sh; fi
 
+# >> grub configuration
+read -p "-- Do you wish to configure grub? [y/N] -> " GRUB_OPTION
+if [ "${GRUB_OPTION,,}" = "y" ] ; then $SCRIPT_DIR/grub-setup.sh; fi
+
 # >> update system packages
 read -p "-- Update system (will take a few minutes)? [y/N] -> " UPDATE_OPTION
 if [ "${UPDATE_OPTION,,}" = "y" ] ; then dnf update; fi
