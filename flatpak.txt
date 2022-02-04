@@ -1,1 +1,2 @@
 flathub us.zoom.Zoom
+microsoft.teams
