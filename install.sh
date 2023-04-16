@@ -1,10 +1,19 @@
 #!/bin/bash
 
-# Find all .sh files in the current directory that are not named install.sh
-for file in $(ls *.sh | grep -v install.sh); do
-    # Strip the .sh extension from the filename
-    filename=$(basename "$file" .sh)
+# Find all .sh files in the current directory
+for file in *.sh; do
+    # Check if the filename is not "install.sh"
+    if [ "$(basename "$file")" != "install.sh" ]; then
+        # Strip the .sh extension from the filename
+        filename=$(basename "$file" .sh)
 
-    # Create a symlink in /usr/local/bin using pkexec
-    pkexec ln -s "$(pwd)/$file" "/usr/local/bin/$filename"
+        # Check if the file is not already symlinked to /usr/local/bin
+        if ! [ -L "/usr/local/bin/$filename" ]; then
+            # Create a symlink in /usr/local/bin using pkexec
+            pkexec ln -s "$(pwd)/$file" "/usr/local/bin/$filename"
+            echo "Symlink created for $filename"
+        else
+            echo "Symlink for $filename already exists"
+        fi
+    fi
 done
