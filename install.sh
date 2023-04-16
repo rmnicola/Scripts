@@ -2,6 +2,12 @@
 
 # Find all .sh files in the current directory
 for file in *.sh; do
+    # Check if the file is not already executable
+    if ! [ -x "$file" ]; then
+        # Make the file executable
+        chmod +x "$file"
+    fi
+
     # Check if the filename is not "install.sh"
     if [ "$(basename "$file")" != "install.sh" ]; then
         # Strip the .sh extension from the filename
