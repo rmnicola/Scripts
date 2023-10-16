@@ -21,7 +21,7 @@ if [ ! -d ~/.fonts ]; then
 fi
 
 # Move the font to the ~/.fonts directory
-mv "${TMP_DIR}/*" ~/.fonts/
+mv "${TMP_DIR}"/* ~/.fonts/
 
 # Refresh the font cache
 fc-cache -f -v
