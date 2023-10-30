@@ -56,3 +56,8 @@ fi
 ensure_xclip
 xclip -selection clipboard < "${SSH_KEY_PUB}"
 echo "SSH public key copied to clipboard!"
+
+gum style \
+	--border normal \
+	--align center --width 50 --margin "1 2" --padding "2 4" \
+	'SSH key configured and copied to your clipboard.' 'https://github.com/settings/keys' 'https://gitlab.com/-/profile/keys'
