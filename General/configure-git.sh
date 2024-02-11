@@ -1,7 +1,8 @@
 #! /bin/bash
 
 if [[ ! -x $(which gum) ]]; then
-    echo "This script uses Gum. Install it before continuing..."
+    printf "This script uses Gum. Install it before continuing...
+    Try running install-charm-tools."
     exit 1
 fi
 
@@ -18,4 +19,3 @@ git config --global user.email "$EMAIL"
 
 gum confirm "Set nvim as the commit editor?" && git config --global core.editor "nvim"
 gum confirm "Configure ssh?" && set-ssh-key git
-
