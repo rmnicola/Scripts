@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ ! -x $(which gum) ]]; then
+    printf "This script uses Gum. Install it before continuing...
+    Try running install-charm-tools"
+    exit 1
+fi
+
 # Function to ensure xclip is installed
 ensure_xclip() {
     which xclip &>/dev/null
@@ -33,7 +39,7 @@ if [ -z "${SSH_KEY_PATH}" ]; then
 fi
 
 # Generate the SSH Key
-ssh-keygen -t rsa -b 4096 -f "${SSH_KEY_PATH}"
+ssh-keygen -t rsa -b 4096 -f "/home/username/.ssh/${SSH_KEY_PATH}"
 
 # Get the public key path
 SSH_KEY_PUB="${SSH_KEY_PATH}.pub"
@@ -60,4 +66,4 @@ echo "SSH public key copied to clipboard!"
 gum style \
 	--border normal \
 	--align center --width 50 --margin "1 2" --padding "2 4" \
-	'SSH key configured and copied to your clipboard.' 'https://github.com/settings/keys' 'https://gitlab.com/-/profile/keys'
+	'SSH key configured and copied to your clipboard. Remember that you need to configure both the access and signing key for Github!' 'https://github.com/settings/keys' 'https://gitlab.com/-/profile/keys'
