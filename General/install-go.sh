@@ -1,6 +1,4 @@
 #!/bin/bash
-# codenoid
-# Script modified to include root check, curl check, Go version check, and PATH update option
 
 # Check if the script is executed as root
 if [[ $EUID -ne 0 ]]; then
@@ -36,23 +34,15 @@ printf "Extracting file...\n"
 tar -C /usr/local -xzf ${LATEST_GO_VERSION}.linux-amd64.tar.gz
 rm ${LATEST_GO_VERSION}.linux-amd64.tar.gz
 
-# Ask user to add Go PATH to /etc/environment
-read -p "Do you want to add Go PATH to your /etc/environment? [Y/n] " response
-if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]
-then
-    if ! grep -q "/usr/local/go/bin" /etc/environment; then
-        echo "Adding Go PATH to /etc/environment"
-        echo "PATH=\"$PATH:/usr/local/go/bin\"" >> /etc/environment
-        # Apply changes without needing a reboot
-        source /etc/environment
-    else
-        printf "Go PATH already exists in /etc/environment\n"
-    fi
-else
-    printf "Skipping PATH addition to /etc/environment\n"
-fi
-
-export PATH=$PATH:/usr/local/go/bin
+printf "Configuring GOPATH.\n"
+export GOROOT=/usr/local/go
+export PATH=$PATH:$GOROOT/bin
 
 printf "You are ready to Go!\n\n";
 go version
+
+printf "\nPlease note that for the go binary configuration to be persistent, 
+you need to add this to your .zshenv/.zshrc/.bashrc:\n
+export GOROOT=/usr/local/go
+export GOPATH=%s/go
+export PATH=%s:%s/bin:%s/bin\n" '$HOME' '$PATH' '$GOROOT' '$GOPATH'
