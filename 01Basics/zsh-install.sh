@@ -62,4 +62,4 @@ done
 zsh
 
 printf "Zsh is now configured and active in this terminal session. 
-The changes will become permanent when you reboot your system."
+The changes will become permanent when you reboot your system.\n"
