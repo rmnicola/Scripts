@@ -46,8 +46,8 @@ if [[ $? -eq 0 ]]; then
         PUB_KEY="$HOME/.ssh/$(ls "$HOME/.ssh" | grep pub | gum choose)"
         echo "Configuring git to use SSH key for signing commits..."
         git config --global gpg.format ssh
-        echo "Setting user.signingkey to $PUB_KEY}"
-        git config --global user.signingkey "$PUB_KEY}"
+        echo "Setting user.signingkey to $PUB_KEY"
+        git config --global user.signingkey "$PUB_KEY"
         echo "Enabling commit.gpgsign..."
         git config --global commit.gpgsign true
         echo "Configuring git to use SSH for GitHub repositories..."
