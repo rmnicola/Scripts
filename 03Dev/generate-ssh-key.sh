@@ -1,69 +1,63 @@
 #!/bin/bash
 
-if [[ ! -x $(which gum) ]]; then
-    printf "This script uses Gum. Install it before continuing...
-    Try running install-charm-tools"
+if [[ ! -x $(which figlet) ]]; then
+    echo "This script uses Figlet. Install it before continuing..."
     exit 1
 fi
 
-# Function to ensure xclip is installed
-ensure_xclip() {
-    which xclip &>/dev/null
-    if [ $? -ne 0 ]; then
-        # Check if the system is Ubuntu or Arch
-        if [ -f "/etc/os-release" ]; then
-            source /etc/os-release
-            if [ "$ID" == "ubuntu" ]; then
-                sudo apt update
-                sudo apt install -y xclip
-            elif [ "$ID" == "arch" ]; then
-                sudo pacman -Syu xclip --noconfirm
-            else
-                echo "Unsupported OS. Install xclip manually."
-                exit 1
-            fi
-        else
-            echo "Unable to determine OS. Install xclip manually."
-            exit 1
-        fi
-    fi
-}
-
-# Prompt user for the SSH key path
-echo "Enter file in which to save the key (/home/username/.ssh/id_rsa): "
-read SSH_KEY_PATH
-
-# If user simply pressed Enter, use the default path
-if [ -z "${SSH_KEY_PATH}" ]; then
-    SSH_KEY_PATH="$HOME/.ssh/id_rsa"
+if [[ ! -x $(which gum) ]]; then
+    echo "This script uses Gum. Install it before continuing..."
+    echo "Try running install-charm-tools."
+    exit 1
 fi
 
+gum style \
+	--border double \
+	--align center --width 50 --margin "1 2" --padding "2 4" \
+  --foreground "#9e53bc" \
+  "$(figlet SSH)" \
+  "$(figlet Keygen)"
+
+if [[ ! -x $(which xclip) ]]; then
+    gum -sl info "Xclip is not installed. Installing it..."
+    if [ -f "/etc/os-release" ]; then
+        source /etc/os-release
+        case $ID in
+            "ubuntu")
+                sudo apt install -y xclip
+                ;;
+            "arch")
+                sudo pacman -Syu xclip --noconfirm
+                ;;
+            *)
+                gum -sl error "Get out of here with that shit distro!!"
+                exit 1
+        esac
+    else
+        gum -sl error "What on earth are you even using? Get out of here!!"
+        exit 1
+    fi
+fi
+
+gum style --foreground "#9e53bc" "Enter the name for your ssh key:"
+SSH_KEY_NAME=$(gum input --placeholder "Default: id_rsa")
+
+# If user simply pressed Enter, use the default path
+if [ -z "${SSH_KEY_NAME}" ]; then
+    SSH_KEY_NAME="id_rsa"
+fi
+
+SSH_KEY_PATH="$HOME/.ssh/$SSH_KEY_NAME"
+
 # Generate the SSH Key
-ssh-keygen -t rsa -b 4096 -f "/home/username/.ssh/${SSH_KEY_PATH}"
+ssh-keygen -t rsa -b 4096 -f "$SSH_KEY_PATH"
 
 # Get the public key path
 SSH_KEY_PUB="${SSH_KEY_PATH}.pub"
 
-# Check for IP/hostname argument
-if [ "$1" == "git" ]; then
-    echo "Configuring git to use SSH key for signing commits..."
-    git config --global gpg.format ssh
-    echo "Setting user.signingkey to ${SSH_KEY_PUB}"
-    git config --global user.signingkey "${SSH_KEY_PUB}"
-    echo "Enabling commit.gpgsign..."
-    git config --global commit.gpgsign true
-    echo "Configuring git to use SSH for GitHub repositories..."
-    git config --global url."git@github.com:".insteadOf "https://github.com/"
-    echo "Git configuration completed!"
-elif [ "$1" ]; then
-    ssh-copy-id "$1"
-fi
-
-ensure_xclip
 xclip -selection clipboard < "${SSH_KEY_PUB}"
 echo "SSH public key copied to clipboard!"
-
-gum style \
-	--border normal \
-	--align center --width 50 --margin "1 2" --padding "2 4" \
-	'SSH key configured and copied to your clipboard. Remember that you need to configure both the access and signing key for Github!' 'https://github.com/settings/keys' 'https://gitlab.com/-/profile/keys'
+echo "You can configure your github and gitlab accounts using the links below:"
+gum style --foreground "#539BF5" --underline \
+    "https://github.com/settings/keys" \
+    "https://gitlab.com/-/profile/keys"
