@@ -1,22 +1,19 @@
 #!/bin/bash
-#
 
-if ! command -v cargo &> /dev/null; then
-  echo "Rust no installed. Installing..."
-  install-rust
-else
-  echo "Rust already installed..."
+if [[ ! -x $(which figlet) ]]; then
+    echo "This script uses Rust. Install it before continuing..."
+    echo "Try running install-rust."
+    exit 1
 fi
 
-# Check if 'fnm' command is available
-if ! command -v fnm &> /dev/null; then
-  echo "fnm is not installed. Installing now..."
-  cargo install fnm
+if [[ ! -x $(which fnm) ]]; then
+    echo "Fnm not installed. Installing..."
+    cargo install fnm
 else
-  echo "fnm is already installed."
+  echo "Fnm is already installed."
 fi
 
-# Use 'fnm' to install latest version of Node.js
+echo "Installing the latest version of node..."
 fnm install --latest
 echo "Node.js has been installed via fnm."
 node --version
