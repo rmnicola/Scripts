@@ -37,3 +37,23 @@ case $COMMIT_EDITOR in
         git config --global core.editor "nano"
         ;;
 esac
+
+gum confirm "Do you want to configure your ssh signing keys?"
+if [[ $? -eq 0 ]]; then
+    PUBLIC_KEYS=$(ls "$HOME/.ssh" | grep pub | wc -l)
+    if [[ $PUBLIC_KEYS -gt 0 ]]; then
+        echo "There are $PUBLIC_KEYS keys available to choose from. Choose:"
+        PUB_KEY="$HOME/.ssh/$(ls "$HOME/.ssh" | grep pub | gum choose)"
+        echo "Configuring git to use SSH key for signing commits..."
+        git config --global gpg.format ssh
+        echo "Setting user.signingkey to $PUB_KEY}"
+        git config --global user.signingkey "$PUB_KEY}"
+        echo "Enabling commit.gpgsign..."
+        git config --global commit.gpgsign true
+        echo "Configuring git to use SSH for GitHub repositories..."
+        git config --global url."git@github.com:".insteadOf "https://github.com/"
+        echo "Git configuration completed!"
+    else
+        gum -sl error "You didn't setup any ssh keys, idiot! Go do that!"
+    fi
+fi
