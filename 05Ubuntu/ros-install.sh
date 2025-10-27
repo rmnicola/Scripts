@@ -3,6 +3,28 @@
 # Ensure the script exits immediately if a command exits with a non-zero status
 set -e
 
+# Detectar a versão do Ubuntu e definir a distro do ROS dinamicamente
+UBUNTU_VERSION=$(lsb_release -rs)
+case $UBUNTU_VERSION in
+    "24.04")
+        ROS_DISTRO="jazzy"
+        echo "Ubuntu 24.04 detected. Using ROS Jazzy Jalisco."
+        ;;
+    "22.04")
+        ROS_DISTRO="humble"
+        echo "Ubuntu 22.04 detected. Using ROS Humble Hawksbill."
+        ;;
+    "20.04")
+        ROS_DISTRO="foxy"
+        echo "Ubuntu 20.04 detected. Using ROS Foxy Fitzroy."
+        ;;
+    *)
+        echo "Ubuntu version $UBUNTU_VERSION is not officially supported by this script."
+        echo "Please check https://docs.ros.org for compatible versions."
+        exit 1
+        ;;
+esac
+
 # Verificar e criar /etc/apt/sources.list se não existir
 if [[ ! -f /etc/apt/sources.list ]]; then
     sudo touch /etc/apt/sources.list
@@ -41,7 +63,7 @@ else
 fi
 
 # Verificar e adicionar o repositório universe se necessário
-if ! grep -q universe /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+if ! grep -rq universe /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null; then
     echo "Adding universe repository..."
     sudo add-apt-repository universe
     sudo apt-get update
@@ -50,7 +72,7 @@ else
 fi
 
 # Verificar e adicionar o repositório ROS2 se necessário
-if ! grep -q ros2 /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+if ! grep -rq ros2 /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null; then
     echo "Adding ros2 repository..."
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
@@ -63,9 +85,9 @@ fi
 echo "Choose what you want to do (space to select):"
 GUM_OPTIONS=$(gum choose --no-limit "Install ROS2" "Install colcon build tools" "Install turtlebot3 packages" "Configure setup script")
 
-# Instalar pacotes conforme as opções escolhidas
+# Instalar pacotes conforme as opções escolhidas, utilizando a distro dinâmicamente detectada
 if [[ "$GUM_OPTIONS" =~ "ROS2" ]]; then
-    sudo apt-get install -y ros-humble-desktop
+    sudo apt-get install -y ros-${ROS_DISTRO}-desktop
 fi
 
 if [[ "$GUM_OPTIONS" =~ "colcon" ]]; then
@@ -73,16 +95,16 @@ if [[ "$GUM_OPTIONS" =~ "colcon" ]]; then
 fi
 
 if [[ "$GUM_OPTIONS" =~ "turtlebot3" ]]; then
-    sudo apt-get install -y ros-humble-turtlebot3*
+    sudo apt-get install -y ros-${ROS_DISTRO}-turtlebot3*
 fi
 
 if [[ "$GUM_OPTIONS" =~ "setup" ]]; then
     echo "Choose the destination file for the source command:"
     RC_PATH=$(gum choose "$HOME/.bashrc" "$HOME/.zshrc" "$HOME/.zshenv" "$HOME/.config/zsh/.zshrc" "$HOME/.config/zsh/.zshenv")
     if echo "$RC_PATH" | grep -q "bash"; then
-        echo "source /opt/ros/humble/setup.bash" >> "$RC_PATH"
+        echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> "$RC_PATH"
     else
-        echo "source /opt/ros/humble/setup.zsh" >> "$RC_PATH"
+        echo "source /opt/ros/${ROS_DISTRO}/setup.zsh" >> "$RC_PATH"
     fi
 fi
 
