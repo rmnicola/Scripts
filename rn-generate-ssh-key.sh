@@ -1,13 +1,12 @@
 #!/bin/bash
 
 if [[ ! -x $(which figlet) ]]; then
-    echo "This script uses Figlet. Install it before continuing..."
+    sudo pacman -S --noconfirm figlet
     exit 1
 fi
 
 if [[ ! -x $(which gum) ]]; then
-    echo "This script uses Gum. Install it before continuing..."
-    echo "Try running install-charm-tools."
+    sudo pacman -S --noconfirm gum
     exit 1
 fi
 
