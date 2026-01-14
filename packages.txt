@@ -8,10 +8,9 @@ base-devel
 gum
 eilmeldung-bin
 figlet
-xclip
 
 # Dev tools
 gemini-cli
 micromamba-bin
-fnm
+fnm-bin
 go

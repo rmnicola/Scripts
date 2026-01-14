@@ -8,6 +8,19 @@
 clear
 gum style --foreground 212 --bold "🦀 Rust Toolchain Setup"
 
+# 0. Remove rust
+if pacman -Qi rust &> /dev/null; then
+    gum log --level warn "Rust package found in pacman. Uninstalling..."
+    if sudo pacman -Rns --noconfirm rust; then
+        gum log --level info "Rust uninstalled."
+    else
+        gum log --level error "Failed to uninstall rust."
+        exit 1
+    fi
+else
+    gum log --level info "Rust (pacman package) not found. Skipping."
+fi
+
 # 1. Ensure rustup is installed
 if ! command -v rustup &> /dev/null; then
     gum log --level warn "Rustup not found. Installing via pacman..."

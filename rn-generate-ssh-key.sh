@@ -17,27 +17,6 @@ gum style \
   "$(figlet SSH)" \
   "$(figlet Keygen)"
 
-if [[ ! -x $(which xclip) ]]; then
-    gum -sl info "Xclip is not installed. Installing it..."
-    if [ -f "/etc/os-release" ]; then
-        source /etc/os-release
-        case $ID in
-            "ubuntu")
-                sudo apt install -y xclip
-                ;;
-            "arch")
-                sudo pacman -Syu xclip --noconfirm
-                ;;
-            *)
-                gum -sl error "Get out of here with that shit distro!!"
-                exit 1
-        esac
-    else
-        gum -sl error "What on earth are you even using? Get out of here!!"
-        exit 1
-    fi
-fi
-
 gum style --foreground "#9e53bc" "Enter the name for your ssh key:"
 SSH_KEY_NAME=$(gum input --placeholder "Default: id_rsa")
 
@@ -54,7 +33,7 @@ ssh-keygen -t rsa -b 4096 -f "$SSH_KEY_PATH"
 # Get the public key path
 SSH_KEY_PUB="${SSH_KEY_PATH}.pub"
 
-xclip -selection clipboard < "${SSH_KEY_PUB}"
+wl-copy < "${SSH_KEY_PUB}"
 echo "SSH public key copied to clipboard!"
 echo "You can configure your github and gitlab accounts using the links below:"
 gum style --foreground "#539BF5" --underline \
