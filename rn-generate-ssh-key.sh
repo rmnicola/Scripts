@@ -35,4 +35,4 @@ SSH_KEY_PUB="${SSH_KEY_PATH}.pub"
 
 wl-copy < "${SSH_KEY_PUB}"
 echo "SSH public key copied to clipboard!"
-$BROWSER "https://github.com/settings/keys" "https://gitlab.com/-/profile/keys"
+chromium https://github.com/settings/keys https://gitlab.com/-/profile/keys
