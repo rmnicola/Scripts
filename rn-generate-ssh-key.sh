@@ -35,7 +35,4 @@ SSH_KEY_PUB="${SSH_KEY_PATH}.pub"
 
 wl-copy < "${SSH_KEY_PUB}"
 echo "SSH public key copied to clipboard!"
-echo "You can configure your github and gitlab accounts using the links below:"
-gum style --foreground "#539BF5" --underline \
-    "https://github.com/settings/keys" \
-    "https://gitlab.com/-/profile/keys"
+$BROWSER "https://github.com/settings/keys" "https://gitlab.com/-/profile/keys"
