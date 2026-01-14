@@ -1,0 +1,17 @@
+# System
+tlp
+zsh
+zellij
+base-devel
+
+# Terminal
+gum
+eilmeldung
+figlet
+xclip
+
+# Dev tools
+gemini-cli
+micromamba-bin
+fnm
+go

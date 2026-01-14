@@ -11,6 +11,7 @@ for item in *; do
         else
             echo "• ~/.config/$item already exists. Skipping."
         fi
+    fi	
 done
 
 echo "Symlinking complete!"
