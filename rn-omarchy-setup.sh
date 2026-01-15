@@ -5,7 +5,8 @@
 # The Orchestrator for all configuration scripts
 # ==========================================
 
-SCRIPT_DIR="./"
+# Configuration
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 CLEANER_URL="https://raw.githubusercontent.com/maxart/omarchy-cleaner/main/omarchy-cleaner.sh"
 
 # ==========================================
@@ -92,11 +93,12 @@ declare -a STEPS=(
     "1. Install System Packages (Base)"
     "2. Configure Rust (Nightly)"
     "3. Install All Packages (Dev & Terminal)"
-    "4. Configure Zsh Shell"
-    "5. Configure Power Management (TLP)"
-    "6. Generate SSH Keys"
-    "7. Configure Git Identity"
-    "8. Run Omarchy Cleaner (Remote)"
+    "4. Install Dotfiles (Documents -> .config)"
+    "5. Configure Zsh Shell"
+    "6. Configure Power Management (TLP)"
+    "7. Generate SSH Keys"
+    "8. Configure Git Identity"
+    "9. Run Omarchy Cleaner (Remote)"
 )
 
 # 2. Wizard Selection
@@ -125,28 +127,33 @@ if [[ "$SELECTED_STEPS" == *"3. Install All Packages"* ]]; then
     run_script "Full Package Installation" "rn-install-packages.sh" "--all"
 fi
 
-# --- Step 4: Zsh ---
-if [[ "$SELECTED_STEPS" == *"4. Configure Zsh Shell"* ]]; then
+# --- Step 4: Dotfiles ---
+if [[ "$SELECTED_STEPS" == *"4. Install Dotfiles"* ]]; then
+    run_script "Dotfiles Setup" "rn-install-dotfiles.sh"
+fi
+
+# --- Step 5: Zsh ---
+if [[ "$SELECTED_STEPS" == *"5. Configure Zsh Shell"* ]]; then
     run_script "Zsh Configuration" "rn-configure-zsh.sh"
 fi
 
-# --- Step 5: TLP ---
-if [[ "$SELECTED_STEPS" == *"5. Configure Power Management"* ]]; then
+# --- Step 6: TLP ---
+if [[ "$SELECTED_STEPS" == *"6. Configure Power Management"* ]]; then
     run_script "TLP Power Management" "rn-configure-tlp.sh"
 fi
 
-# --- Step 6: SSH ---
-if [[ "$SELECTED_STEPS" == *"6. Generate SSH Keys"* ]]; then
+# --- Step 7: SSH ---
+if [[ "$SELECTED_STEPS" == *"7. Generate SSH Keys"* ]]; then
     run_script "SSH Key Generation" "rn-generate-ssh-key.sh"
 fi
 
-# --- Step 7: Git ---
-if [[ "$SELECTED_STEPS" == *"7. Configure Git Identity"* ]]; then
+# --- Step 8: Git ---
+if [[ "$SELECTED_STEPS" == *"8. Configure Git Identity"* ]]; then
     run_script "Git Configuration" "rn-configure-git.sh"
 fi
 
-# --- Step 8: Cleaner ---
-if [[ "$SELECTED_STEPS" == *"8. Run Omarchy Cleaner"* ]]; then
+# --- Step 9: Cleaner ---
+if [[ "$SELECTED_STEPS" == *"9. Run Omarchy Cleaner"* ]]; then
     run_cleaner
 fi
 

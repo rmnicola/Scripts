@@ -6,6 +6,7 @@ zk
 presenterm
 base-devel
 profile-cleaner
+python-weasyprint
 
 # Terminal
 gum
