@@ -3,6 +3,16 @@
 PROJECTS_ROOT="$HOME/Documents/Projects"
 PROFILES_ROOT="$HOME/.local/share/project-browser-profiles"
 
+# Parse arguments for automatic "yes"
+AUTO_YES=false
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -y|--yes) AUTO_YES=true ;;
+        *) echo "Unknown parameter passed: $1"; exit 1 ;;
+    esac
+    shift
+done
+
 # Check if profile-cleaner is installed
 if ! command -v profile-cleaner &> /dev/null; then
     echo "❌ Error: 'profile-cleaner' is not installed."
@@ -43,9 +53,15 @@ for profile_path in "$PROFILES_ROOT"/*; do
         size=$(du -sh "$profile_path" | cut -f1)
         echo "       Size: $size"
         
-        # Ask to delete
-        read -p "       Delete this profile? [y/N] " -n 1 -r
-        echo
+        # Determine deletion choice
+        if [ "$AUTO_YES" = true ]; then
+             echo "       [Auto-Yes] Deleting..."
+             REPLY="y"
+        else
+             read -p "       Delete this profile? [y/N] " -n 1 -r
+             echo
+        fi
+
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             rm -rf "$profile_path"
             echo "       ✅ Deleted."
@@ -78,12 +94,12 @@ for profile_path in "$PROFILES_ROOT"/*; do
     profile_name=$(basename "$profile_path")
     
     echo "   🚀 Processing: $profile_name"
-    
-    # Run profile-cleaner on the specific path
-    # 'p' tells it to treat the argument as a custom path
     profile-cleaner p "$profile_path"
-    
     echo "---------------------------------------------"
 done
 
 echo "✅ Cleanup and optimization complete."
+# Wait for user to read output if not auto-yes (or always wait if you prefer)
+if [ "$AUTO_YES" = false ]; then
+    read -p "Press any key to exit..."
+fi

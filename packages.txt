@@ -2,6 +2,8 @@
 tlp
 zsh
 zellij
+zk
+presenterm
 base-devel
 profile-cleaner
 
