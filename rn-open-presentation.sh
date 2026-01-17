@@ -53,8 +53,7 @@ if zellij list-sessions | grep -q "$ZELLIJ_SESSION"; then
     cat <<EOF > "$TMP_LAYOUT"
 layout {
     tab name="$SLUG" focus=true {
-        pane command="nvim" {
-            args "present.md"
+        pane {
             cwd "$FULL_PATH"
         }
         // We add your bar here so this specific tab looks consistent with your others
