@@ -12,9 +12,14 @@ python-weasyprint
 gum
 eilmeldung-bin
 figlet
+w3m
+rdrview
 
 # Dev tools
 gemini-cli
 micromamba-bin
 fnm-bin
 go
+
+# Others
+zotero-bin
