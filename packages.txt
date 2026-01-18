@@ -1,25 +1,29 @@
-# System
+# Depend
+base-devel
+figlet
+gum
+profile-cleaner
+python-weasyprint
 tlp
 zsh
 zellij
-zk
-presenterm
-base-devel
-profile-cleaner
-python-weasyprint
 
-# Terminal
-gum
-eilmeldung-bin
-figlet
-w3m
-rdrview
-
-# Dev tools
-gemini-cli
+# DEV
 micromamba-bin
 fnm-bin
 go
 
-# Others
+# CLI
+zk
+
+# TUI
+eilmeldung-bin
+gemini-cli
+opencode-bin
+presenterm
+rdrview
+w3m
+
+# GUI
+zathura
 zotero-bin
