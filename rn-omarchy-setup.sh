@@ -90,15 +90,14 @@ show_header
 
 # 1. Define the Menu Options
 declare -a STEPS=(
-    "1. Install System Packages (Base)"
-    "2. Configure Rust (Nightly)"
-    "3. Install All Packages (Dev & Terminal)"
-    "4. Install Dotfiles (Documents -> .config)"
-    "5. Configure Zsh Shell"
-    "6. Configure Power Management (TLP)"
-    "7. Generate SSH Keys"
-    "8. Configure Git Identity"
-    "9. Run Omarchy Cleaner (Remote)"
+    "1. Install dependencies"
+    "2. Configure rust"
+    "3. Install packages"
+    "4. Install dotfiles"
+    "5. Configure zsh"
+    "6. Configure power management"
+    "7. Configure git"
+    "8. Run cleaner script"
 )
 
 # 2. Wizard Selection
@@ -113,47 +112,43 @@ fi
 # 3. Execution Loop
 
 # --- Step 1: System Packages ---
-if [[ "$SELECTED_STEPS" == *"1. Install System Packages"* ]]; then
-    run_script "System Packages" "rn-install-packages.sh" "--section" "System"
+if [[ "$SELECTED_STEPS" == *"1. Install dependencies"* ]]; then
+    run_script "System dependencies" "rn-install-packages.sh" "-s" "Depend" "-a"
 fi
 
 # --- Step 2: Rust ---
-if [[ "$SELECTED_STEPS" == *"2. Configure Rust"* ]]; then
-    run_script "Rust Configuration" "rn-install-rust.sh"
+if [[ "$SELECTED_STEPS" == *"2. Configure rust"* ]]; then
+    run_script "Rust configuration" "rn-install-rust.sh"
 fi
 
 # --- Step 3: All Packages ---
-if [[ "$SELECTED_STEPS" == *"3. Install All Packages"* ]]; then
-    run_script "Full Package Installation" "rn-install-packages.sh" "--all"
+if [[ "$SELECTED_STEPS" == *"3. Install packages"* ]]; then
+    run_script "Package installation" "rn-install-packages.sh" "-e" "Depend"
 fi
 
 # --- Step 4: Dotfiles ---
-if [[ "$SELECTED_STEPS" == *"4. Install Dotfiles"* ]]; then
-    run_script "Dotfiles Setup" "rn-install-dotfiles.sh"
+if [[ "$SELECTED_STEPS" == *"4. Install dotfiles"* ]]; then
+    run_script "Dotfiles installation" "rn-install-dotfiles.sh"
 fi
 
 # --- Step 5: Zsh ---
-if [[ "$SELECTED_STEPS" == *"5. Configure Zsh Shell"* ]]; then
-    run_script "Zsh Configuration" "rn-configure-zsh.sh"
+if [[ "$SELECTED_STEPS" == *"5. Configure zsh"* ]]; then
+    run_script "Zsh configuration" "rn-configure-zsh.sh"
 fi
 
 # --- Step 6: TLP ---
-if [[ "$SELECTED_STEPS" == *"6. Configure Power Management"* ]]; then
-    run_script "TLP Power Management" "rn-configure-tlp.sh"
+if [[ "$SELECTED_STEPS" == *"6. Configure power management"* ]]; then
+    run_script "TLP power management" "rn-configure-tlp.sh"
 fi
 
-# --- Step 7: SSH ---
-if [[ "$SELECTED_STEPS" == *"7. Generate SSH Keys"* ]]; then
-    run_script "SSH Key Generation" "rn-generate-ssh-key.sh"
+# --- Step 7: Git ---
+if [[ "$SELECTED_STEPS" == *"7. Configure git"* ]]; then
+    run_script "SSH key generation" "rn-generate-ssh-key.sh"
+    run_script "Git configuration" "rn-configure-git.sh"
 fi
 
-# --- Step 8: Git ---
-if [[ "$SELECTED_STEPS" == *"8. Configure Git Identity"* ]]; then
-    run_script "Git Configuration" "rn-configure-git.sh"
-fi
-
-# --- Step 9: Cleaner ---
-if [[ "$SELECTED_STEPS" == *"9. Run Omarchy Cleaner"* ]]; then
+# --- Step 8: Cleaner ---
+if [[ "$SELECTED_STEPS" == *"8. Run cleaner script"* ]]; then
     run_cleaner
 fi
 
