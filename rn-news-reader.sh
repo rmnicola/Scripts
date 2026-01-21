@@ -1,25 +1,62 @@
 #!/bin/bash
 
-# If the first argument is --forced, use the Nuclear option.
-if [ "$1" == "--forced" ]; then
-    shift  # Remove "--forced" so $1 becomes the URL
-    MODE="nuclear"
-else
-    MODE="standard"
+# Default settings
+MODE="standard"
+SILENT="false"
+URL=""
+UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --forced)
+      MODE="nuclear"
+      shift
+      ;;
+    -s|--silent)
+      SILENT="true"
+      shift
+      ;;
+    *)
+      # Assume anything not a flag is the URL
+      URL="$1"
+      shift
+      ;;
+  esac
+done
+
+if [ -z "$URL" ]; then
+    echo "Error: No URL provided."
+    exit 1
 fi
 
-URL="$1"
+# Function to run Nuclear logic (Chromium dump)
+run_nuclear() {
+    # Dump DOM with Chromium -> Pipe to rdrview -> Output to stdout (no browser)
+    chromium --headless=new --dump-dom --user-agent="$UA" "$URL" 2>/dev/null | rdrview -H
+}
 
-if [ "$MODE" == "nuclear" ]; then
-    # --- NUCLEAR OPTION (Chromium -> rdrview -> w3m) ---
-    # Used for NYT/Bloomberg or sites with JS Paywalls.
-    UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-    
-    # Run headless chromium to dump the DOM, clean it, and pipe to w3m
-    chromium --headless=new --dump-dom --user-agent="$UA" "$URL" 2>/dev/null | rdrview -B w3m
+# Function to run Standard logic (Direct rdrview)
+run_standard() {
+    # Run rdrview on URL -> Output to stdout (no browser)
+    rdrview -H "$URL"
+}
+
+# --- EXECUTION ---
+
+if [ "$SILENT" == "true" ]; then
+    # SILENT MODE: Output to temp file, do not open w3m
+    if [ "$MODE" == "nuclear" ]; then
+        run_nuclear
+    else
+        run_standard
+    fi
 else
-    # --- STANDARD OPTION (rdrview -> w3m) ---
-    # Lightweight, fast, no browser engine. Best for Folha, blogs, etc.
-    # We pass the width/type flags to w3m via the -B argument.
-    rdrview -B w3m "$URL"
+    # INTERACTIVE MODE: Pipe result directly to w3m (using rdrview's -B or manual pipe)
+    # We use manual piping to w3m here to keep logic consistent between modes
+    if [ "$MODE" == "nuclear" ]; then
+        chromium --headless=new --dump-dom --user-agent="$UA" "$URL" 2>/dev/null | rdrview -B w3m
+    else
+        rdrview -B w3m "$URL"
+    fi
 fi
