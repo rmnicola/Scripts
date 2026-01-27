@@ -1,32 +1,30 @@
-# Depend
-base-devel
-bibtex
-figlet
-gum
-profile-cleaner
-python-weasyprint
-texlive-latex
-texlive-binextra
+# System
 tlp
 zsh
 zellij
+base-devel
+profile-cleaner
+python-weasyprint
+pandoc
+typst
 
-# DEV
+# TUI Applications
+zk
+presenterm
+
+# Terminal
+gum
+eilmeldung-bin
+figlet
+w3m
+rdrview
+
+# Dev tools
+gemini-cli
 micromamba-bin
 fnm-bin
 go
 
-# CLI
-zk
-
-# TUI
-eilmeldung-bin
-gemini-cli
-opencode-bin
-presenterm
-rdrview
-w3m
-
-# GUI
+# Others
 zathura
 zotero-bin
