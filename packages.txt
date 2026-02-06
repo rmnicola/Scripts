@@ -3,6 +3,7 @@ tlp
 zsh
 zellij
 base-devel
+kitty
 profile-cleaner
 python-weasyprint
 pandoc

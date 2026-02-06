@@ -23,5 +23,5 @@ fi
 # 2. Launch Ghostty Fullscreen
 # We use hyprctl to spawn it with the specific flags you requested.
 # --font-size=20 makes it readable for audiences.
-hyprctl dispatch exec "[fullscreen] ghostty --font-size=20 \
---working-directory='$FULL_PATH' -e presenterm present.md"
+hyprctl dispatch exec "[fullscreen] kitty -o font_size=20 \
+--working-directory='$FULL_PATH' presenterm present.md"
