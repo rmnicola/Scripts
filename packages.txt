@@ -8,10 +8,12 @@ profile-cleaner
 python-weasyprint
 pandoc
 typst
+lsof
 
 # TUI Applications
 zk
 presenterm
+opencode-bin
 
 # Terminal
 gum
@@ -29,3 +31,4 @@ go
 # Others
 zathura
 zotero-bin
+ttf-manrope
