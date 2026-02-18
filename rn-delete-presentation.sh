@@ -11,14 +11,14 @@ if [ ! -d "$PRESENT_ROOT" ]; then
 fi
 
 # 1. Select Presentation to Delete
-# Lists all directories in the presentations folder
-SELECTION=$(find "$PRESENT_ROOT" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort | sed "s/^/$ICON /" | walker --dmenu --placeholder "⚠️  DELETE PRESENTATION")
+# Lists all directories in the presentations folder (excluding hidden)
+SELECTION=$(find "$PRESENT_ROOT" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf '%f\n' | sort | sed "s/^/$ICON /" | walker --dmenu --placeholder "⚠️  DELETE PRESENTATION")
 
 # Exit if user cancelled (Esc)
 [ -z "$SELECTION" ] && exit 0
 
 # Clean the selection
-SELECTED_DIR="${SELECTION#$ICON }"
+SELECTED_DIR="${SELECTION#"$ICON" }"
 FULL_PATH="$PRESENT_ROOT/$SELECTED_DIR"
 
 # 2. Safety Confirmation

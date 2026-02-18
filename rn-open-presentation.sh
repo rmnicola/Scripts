@@ -9,36 +9,24 @@ ICON="📽️"
 mkdir -p "$PRESENT_ROOT"
 
 # 1. Select or Create
-RAW_INPUT=$(find "$PRESENT_ROOT" -mindepth 1 -maxdepth 1 -type d -printf \
+RAW_INPUT=$(find "$PRESENT_ROOT" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -printf \
   '%f\n' | sort | sed "s/^/$ICON /" | walker --dmenu --placeholder\
   "📝 Edit or Create Presentation")
 
 [ -z "$RAW_INPUT" ] && exit 0
 
-INPUT_CLEAN="${RAW_INPUT#$ICON }"
+INPUT_CLEAN="${RAW_INPUT#"$ICON" }"
 TITLE="$INPUT_CLEAN"
 SLUG=$(echo "$TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/[_ ]/-/g')
 FULL_PATH="$PRESENT_ROOT/$SLUG"
-FILE_PATH="$FULL_PATH/present.md"
 
 # 2. Scaffolding
 if [ ! -d "$FULL_PATH" ]; then
     notify-send "📽️ New Presentation" "Creating scaffolding for '$TITLE'..."
-    mkdir -p "$FULL_PATH/_partials"
-    mkdir -p "$FULL_PATH/assets"
-    mkdir -p "$FULL_PATH/export"
-    CURRENT_DATE=$(date +%Y-%m-%d)
-    cat <<EOF > "$FILE_PATH"
----
-author: Rodrigo Nicola
-date: '$CURRENT_DATE'
-title: '$TITLE'
----
-
-$TITLE
----
-
-EOF
+    cp -r "$PRESENT_ROOT/.inteli-template" "$FULL_PATH"
+    mv "$FULL_PATH/main.typ" "$FULL_PATH/$SLUG.typ"
+    rm -rf "$FULL_PATH/build"
+    mkdir -p "$FULL_PATH/build"
 fi
 
 # 3. Open in Zellij
