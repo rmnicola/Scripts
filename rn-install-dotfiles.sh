@@ -75,8 +75,9 @@ fi
 # 4. Scan and Select Configs
 cd "$TARGET_DIR" || exit 1
 
-# Find subdirectories (excluding hidden ones like .git)
-mapfile -t AVAILABLE_CONFIGS < <(find . -maxdepth 1 -type d -not -path '*/.*' -not -path '.' -printf '%P\n' | sort)
+# Find subdirectories (excluding hidden ones like .git and special configs)
+# keyd is excluded - use rn-install-keyd.sh for system-level config
+mapfile -t AVAILABLE_CONFIGS < <(find . -maxdepth 1 -type d -not -path '*/.*' -not -path '.' -printf '%P\n' | grep -v '^keyd$' | sort)
 
 if [ ${#AVAILABLE_CONFIGS[@]} -eq 0 ]; then
     gum log --level warn "No directories found in this repository."

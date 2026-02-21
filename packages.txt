@@ -6,13 +6,12 @@ base-devel
 kitty
 profile-cleaner
 python-weasyprint
-pandoc
 typst
 lsof
+keyd
 
 # TUI Applications
 zk
-presenterm
 opencode-bin
 
 # Terminal
