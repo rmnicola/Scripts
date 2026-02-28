@@ -43,7 +43,6 @@ fi
 echo ""
 gum style --foreground 212 "Enter the GitHub repository to clone (Format: user/repo)"
 REPO_INPUT=$(gum input --placeholder "rnicola/Dotfiles")
-
 # Use default if input is empty
 REPO_STRING="${REPO_INPUT:-rnicola/Dotfiles}"
 
