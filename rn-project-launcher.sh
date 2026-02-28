@@ -96,10 +96,4 @@ nohup chromium \
 hyprctl clients -j | jq -r ".[] | select(.workspace.id == $TERM_WORKSPACE) | .address" | xargs -r -I{} hyprctl dispatch closewindow address:{}
 
 hyprctl dispatch workspace $TERM_WORKSPACE
-
-ghostty \
-  --class="com.projterm" \
-  --working-directory="$FULL_PATH" \
-  -e zellij attach -c "$SESSION_NAME" &
-
-exit 0
+hyprctl dispatch exec "ghostty --class=com.projterm --working-directory=\"$FULL_PATH\" -e zellij attach -c \"$SESSION_NAME\""
